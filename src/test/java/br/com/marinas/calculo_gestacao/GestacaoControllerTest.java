@@ -1,7 +1,7 @@
 package br.com.marinas.calculo_gestacao;
 
-import br.com.marinas.calculo_gestacao.model.Classificacao;
-import br.com.marinas.calculo_gestacao.model.Gestacao;
+import br.com.marinas.calculo_gestacao.domain.gestacao.Classificacao;
+import br.com.marinas.calculo_gestacao.domain.gestacao.Gestacao;
 import br.com.marinas.calculo_gestacao.service.GestacaoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

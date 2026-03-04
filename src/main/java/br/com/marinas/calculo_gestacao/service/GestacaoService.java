@@ -1,19 +1,23 @@
 package br.com.marinas.calculo_gestacao.service;
 
+import br.com.marinas.calculo_gestacao.dto.DppResponse;
 import br.com.marinas.calculo_gestacao.exception.GestacaoNaoEncontradaException;
-import br.com.marinas.calculo_gestacao.model.Gestacao;
-import br.com.marinas.calculo_gestacao.repository.GestacaoRepository;
+import br.com.marinas.calculo_gestacao.domain.gestacao.Gestacao;
+import br.com.marinas.calculo_gestacao.infrastructure.GestacaoRepositoryJpa;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Service
 public class GestacaoService {
 
-    private GestacaoRepository gestacaoRepository;
+    private GestacaoRepositoryJpa gestacaoRepository;
 
-    public GestacaoService(GestacaoRepository gestacaoRepository) {
+    public DppResponse calcular(LocalDate dum) {
+
+    }
+
+    public GestacaoService(GestacaoRepositoryJpa gestacaoRepository) {
         this.gestacaoRepository = gestacaoRepository;
     }
 
@@ -51,4 +55,6 @@ public class GestacaoService {
                 .orElseThrow(() -> new GestacaoNaoEncontradaException(id));
 
     }
+
+
 }

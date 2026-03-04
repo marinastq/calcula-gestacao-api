@@ -1,9 +1,9 @@
 package br.com.marinas.calculo_gestacao;
 
 import br.com.marinas.calculo_gestacao.exception.GestacaoNaoEncontradaException;
-import br.com.marinas.calculo_gestacao.model.Classificacao;
-import br.com.marinas.calculo_gestacao.model.Gestacao;
-import br.com.marinas.calculo_gestacao.repository.GestacaoRepository;
+import br.com.marinas.calculo_gestacao.domain.gestacao.Classificacao;
+import br.com.marinas.calculo_gestacao.domain.gestacao.Gestacao;
+import br.com.marinas.calculo_gestacao.infrastructure.GestacaoRepositoryJpa;
 import br.com.marinas.calculo_gestacao.service.GestacaoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
 public class GestacaoServiceTest {
     @Mock
-    private GestacaoRepository gestacaoRepository;
+    private GestacaoRepositoryJpa gestacaoRepository;
 
     @InjectMocks
     private GestacaoService gestacaoService;

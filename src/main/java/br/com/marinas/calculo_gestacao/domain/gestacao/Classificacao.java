@@ -1,4 +1,4 @@
-package br.com.marinas.calculo_gestacao.model;
+package br.com.marinas.calculo_gestacao.domain.gestacao;
 
 public enum Classificacao {
     GESTACAO_NORMAL,

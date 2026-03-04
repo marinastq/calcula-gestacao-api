@@ -1,4 +1,4 @@
-package br.com.marinas.calculo_gestacao.model;
+package br.com.marinas.calculo_gestacao.domain.gestacao;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
