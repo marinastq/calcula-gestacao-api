@@ -1,20 +1,45 @@
 package br.com.marinas.calculo_gestacao.service;
 
-import br.com.marinas.calculo_gestacao.dto.DppResponse;
+import br.com.marinas.calculo_gestacao.domain.gestacao.IdadeGestacional;
 import br.com.marinas.calculo_gestacao.exception.GestacaoNaoEncontradaException;
 import br.com.marinas.calculo_gestacao.domain.gestacao.Gestacao;
 import br.com.marinas.calculo_gestacao.infrastructure.GestacaoRepositoryJpa;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class GestacaoService {
 
     private GestacaoRepositoryJpa gestacaoRepository;
 
-    public DppResponse calcular(LocalDate dum) {
+    public IdadeGestacional calcularDppPorDum(LocalDate dum) {
+        long totalDias = ChronoUnit.DAYS.between(dum, LocalDate.now());
 
+        return calculaIdadeGestacional(totalDias, dum.plusDays(280));
+    }
+
+    private IdadeGestacional calculaIdadeGestacional(long totalDias, LocalDate dpp) {
+        int semanas = (int) (totalDias / 7);
+        int dias = (int) (totalDias % 7);
+
+        return new IdadeGestacional(
+                dpp,
+                semanas,
+                dias,
+                semanas < 13 ? 1 : semanas < 28 ? 2 : 3
+        );
+    }
+
+    public IdadeGestacional calcularDppPorUltra(LocalDate dataUltra, int semanas, int dias){
+        int idadeGestacionalEmDias = semanas * 7 + dias;
+
+        long diasDesdeExame = ChronoUnit.DAYS.between(dataUltra, LocalDate.now());
+
+        long totalDias = idadeGestacionalEmDias + diasDesdeExame;
+
+        return calculaIdadeGestacional(totalDias, dataUltra.plusDays((280 - idadeGestacionalEmDias)));
     }
 
     public GestacaoService(GestacaoRepositoryJpa gestacaoRepository) {

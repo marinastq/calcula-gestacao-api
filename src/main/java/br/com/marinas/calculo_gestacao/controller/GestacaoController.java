@@ -1,8 +1,9 @@
 package br.com.marinas.calculo_gestacao.controller;
 
 import br.com.marinas.calculo_gestacao.domain.gestacao.Gestacao;
-import br.com.marinas.calculo_gestacao.dto.CalculoDumRequest;
-import br.com.marinas.calculo_gestacao.dto.DppResponse;
+import br.com.marinas.calculo_gestacao.domain.gestacao.IdadeGestacional;
+import br.com.marinas.calculo_gestacao.dto.CalculoDppUltraRequest;
+import br.com.marinas.calculo_gestacao.dto.IdadeGestacionalResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +26,24 @@ public class GestacaoController {
         return gestacaoService.criarGestacao(gestacao);
     }
 
-    @GetMapping("/gestacoes/calculo-idade-por-dum")
+    @GetMapping("/gestacoes/calculo-ddp-por-dum")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<DppResponse> calcular(@RequestParam CalculoDumRequest calculoDum) {
-        return ResponseEntity.ok(gestacaoService.calcular(calculoDum.dum()));
+    public ResponseEntity<IdadeGestacionalResponse> calcularDppPorDum(@RequestParam LocalDate dum) {
+        IdadeGestacional idadeGestacional = gestacaoService.calcularDppPorDum(dum);
+
+        return ResponseEntity.ok(IdadeGestacionalResponse.from(idadeGestacional));
+    }
+
+    @GetMapping("/gestacoes/calculo-ddp-por-ultra")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<IdadeGestacionalResponse> calcularDppPorUltra(@ModelAttribute CalculoDppUltraRequest calculoUltra) {
+        IdadeGestacional idadeGestacional = gestacaoService.calcularDppPorUltra(
+                calculoUltra.dataUltra(),
+                calculoUltra.semanas(),
+                calculoUltra.dias());
+
+        return ResponseEntity.ok(IdadeGestacionalResponse.from(idadeGestacional));
+
     }
 
 }
