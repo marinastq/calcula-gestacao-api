@@ -26,21 +26,23 @@ public class GestacaoController {
         return gestacaoService.criarGestacao(gestacao);
     }
 
-    @GetMapping("/gestacoes/calculo-ddp-por-dum")
+    @GetMapping("/gestacoes/dpp/por-dum")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<IdadeGestacionalResponse> calcularDppPorDum(@RequestParam LocalDate dum) {
-        IdadeGestacional idadeGestacional = gestacaoService.calcularDppPorDum(dum);
+
+        IdadeGestacional idadeGestacional = gestacaoService.calcularDppPorDum(dum, LocalDate.now());
 
         return ResponseEntity.ok(IdadeGestacionalResponse.from(idadeGestacional));
     }
 
-    @GetMapping("/gestacoes/calculo-ddp-por-ultra")
+    @GetMapping("/gestacoes/dpp/por-ultra")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<IdadeGestacionalResponse> calcularDppPorUltra(@ModelAttribute CalculoDppUltraRequest calculoUltra) {
         IdadeGestacional idadeGestacional = gestacaoService.calcularDppPorUltra(
                 calculoUltra.dataUltra(),
                 calculoUltra.semanas(),
-                calculoUltra.dias());
+                calculoUltra.dias(),
+                LocalDate.now());
 
         return ResponseEntity.ok(IdadeGestacionalResponse.from(idadeGestacional));
 

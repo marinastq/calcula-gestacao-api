@@ -14,10 +14,24 @@ public class GestacaoService {
 
     private GestacaoRepositoryJpa gestacaoRepository;
 
-    public IdadeGestacional calcularDppPorDum(LocalDate dum) {
-        long totalDias = ChronoUnit.DAYS.between(dum, LocalDate.now());
+    public GestacaoService(GestacaoRepositoryJpa gestacaoRepository) {
+        this.gestacaoRepository = gestacaoRepository;
+    }
+
+    public IdadeGestacional calcularDppPorDum(LocalDate dum, LocalDate dataHoje) {
+        long totalDias = ChronoUnit.DAYS.between(dum, dataHoje);
 
         return calculaIdadeGestacional(totalDias, dum.plusDays(280));
+    }
+
+    public IdadeGestacional calcularDppPorUltra(LocalDate dataUltra, int semanas, int dias, LocalDate dataHoje){
+        int idadeGestacionalEmDias = semanas * 7 + dias;
+
+        long diasDesdeExame = ChronoUnit.DAYS.between(dataUltra, dataHoje);
+
+        long totalDias = idadeGestacionalEmDias + diasDesdeExame;
+
+        return calculaIdadeGestacional(totalDias, dataUltra.plusDays((280 - idadeGestacionalEmDias)));
     }
 
     private IdadeGestacional calculaIdadeGestacional(long totalDias, LocalDate dpp) {
@@ -32,19 +46,7 @@ public class GestacaoService {
         );
     }
 
-    public IdadeGestacional calcularDppPorUltra(LocalDate dataUltra, int semanas, int dias){
-        int idadeGestacionalEmDias = semanas * 7 + dias;
 
-        long diasDesdeExame = ChronoUnit.DAYS.between(dataUltra, LocalDate.now());
-
-        long totalDias = idadeGestacionalEmDias + diasDesdeExame;
-
-        return calculaIdadeGestacional(totalDias, dataUltra.plusDays((280 - idadeGestacionalEmDias)));
-    }
-
-    public GestacaoService(GestacaoRepositoryJpa gestacaoRepository) {
-        this.gestacaoRepository = gestacaoRepository;
-    }
 
     public Gestacao criarGestacao(Gestacao gestacao) {
         return gestacaoRepository.save(gestacao);

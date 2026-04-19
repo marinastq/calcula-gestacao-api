@@ -1,5 +1,6 @@
 package br.com.marinas.calculo_gestacao;
 
+import br.com.marinas.calculo_gestacao.domain.gestacao.IdadeGestacional;
 import br.com.marinas.calculo_gestacao.exception.GestacaoNaoEncontradaException;
 import br.com.marinas.calculo_gestacao.domain.gestacao.Classificacao;
 import br.com.marinas.calculo_gestacao.domain.gestacao.Gestacao;
@@ -48,7 +49,7 @@ public class GestacaoServiceTest {
 
         Gestacao gestacaoEncontrada = this.gestacaoService.buscarGestacaoPeloId(1L);
 
-        assertEquals("2024-12-28", gestacaoEncontrada.getDataDUM().toString());
+        assertEquals(LocalDate.of(2024, 12, 28), gestacaoEncontrada.getDataDUM());
         verify(this.gestacaoRepository).findById(1L);
     }
 
@@ -100,6 +101,40 @@ public class GestacaoServiceTest {
 
         assertEquals("2025-10-04", data40Semanas.toString());
     }
+
+    @Test
+    @DisplayName("deve apresentar a contagem de 40 semanas da gestacao por dum")
+    void deveApresentarContagem40SemanasDaGestacaoPorDum(){
+        LocalDate dum = LocalDate.of(2024,12,28);
+        LocalDate hoje = LocalDate.of(2025, 1, 12);
+
+        IdadeGestacional idadeGestacional = gestacaoService.calcularDppPorDum(dum, hoje);
+
+        assertEquals(LocalDate.of(2025,10,4), idadeGestacional.dpp());
+        assertEquals(2, idadeGestacional.semanas());
+        assertEquals(1, idadeGestacional.dias());
+        assertEquals(1, idadeGestacional.trimestre());
+    }
+
+    @Test
+    @DisplayName("deve apresentar a contagem de 40 semanas da gestacao por ultra")
+    void deveApresentarContagem40SemanasDaGestacaoPorUltra(){
+        LocalDate ultra = LocalDate.of(2026,1,1);
+        LocalDate hoje = LocalDate.of(2026, 1, 8);
+
+        IdadeGestacional idadeGestacional = gestacaoService.calcularDppPorUltra(
+                ultra,
+                10,
+                0,
+                hoje
+        );
+
+        assertEquals(LocalDate.of(2026,7,30), idadeGestacional.dpp());
+        assertEquals(11, idadeGestacional.semanas());
+        assertEquals(0, idadeGestacional.dias());
+        assertEquals(1, idadeGestacional.trimestre());
+    }
+
 
 
     private Gestacao buildMockGestacao() {
